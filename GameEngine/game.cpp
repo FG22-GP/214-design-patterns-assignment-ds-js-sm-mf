@@ -1,3 +1,4 @@
+#pragma once
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
@@ -8,154 +9,15 @@
 #include <ctime>
 #include <iostream>
 
+#include "GameObject.h"
+#include "Component.h"
+#include "Transform.h"
+#include "Vector3.h"
+#include "Components/RenderCircleComponent.h"
+#include "Components/TestComponent.h"
+
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
-
-// FORWARD DECLARATIONS
-class Component;
-
-
-
-// CLASSES
-
-class Vector3
-{
-	public:
-		float x,y,z;
-
-		Vector3() : x(0), y(0), z(0) {}
-		Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
-
-		Vector3 operator+(const Vector3& other) const {
-			return Vector3(x+other.x, y+other.y, z+other.z);
-		}
-
-		Vector3 operator+=(const Vector3& other)
-		{
-			x += other.x;
-			y += other.y;
-			z += other.z;
-			return *this;
-		}
-
-		Vector3 operator*(float factor)
-		{
-			return Vector3(x*factor, y*factor, z*factor);
-		}
-
-		Vector3 operator*=(float factor)
-		{
-			x *= factor;
-			y *= factor;
-			z *= factor;
-			return *this;
-		}
-
-		Vector3 operator-(const Vector3& other) const {
-			return Vector3(x-other.x, y-other.y, z-other.z);
-		}
-
-		Vector3 operator-=(const Vector3& other)
-		{
-			x -= other.x;
-			y -= other.y;
-			z -= other.z;
-			return *this;
-		}
-
-		// TODO a bunch of operators still missing + stuff like DotProduct, Cross, Distance etc...
-		//
-		// look into not returning copies
-
-};
-
-class Transform
-{
-	public:
-		Vector3 position;
-
-		void Move(float dX, float dY, float dZ)
-		{
-			position.x += dX;
-			position.y += dY;
-			position.z += dZ;
-		}
-
-		void SetPosition(float X, float Y, float Z)
-		{
-			position.x = X;
-			position.y = Y;
-			position.z = Z;
-		}
-
-	// TODO add rotation and scale
-};
-
-class GameObject
-{
-	public:
-		std::string name;
-		Transform transform;
-		std::vector<Component*> components;
-		bool active = true;
-		bool visible = true;
-
-		GameObject(std::string inname = "GameObject"){
-			name = inname;
-		}
-
-};
-
-
-
-class Component
-{
-	public:
-		GameObject *gameObject;
-		virtual void Tick() = 0;
-};
-
-class RenderCircleComponent : public Component
-{
-	public:
-		SDL_Renderer* renderer;
-		int r, g, b;
-		int radius;
-		void Tick() {
-			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
-
-			for (int y = -radius; y <= radius; y++)
-			{
-				for (int x = -radius; x <= radius; x++)
-				{
-					if ( (x * x) + (y * y) <= radius * radius) // if distance <= radius = we draw a pixel
-					{
-						SDL_RenderDrawPoint(renderer, gameObject->transform.position.x + x, gameObject->transform.position.y + y);
-					}
-				}
-			}
-		}
-
-		RenderCircleComponent(SDL_Renderer* render, int red, int green, int blue, int rad)
-		{
-			r = red;
-			g = green;
-			b = blue;
-			radius = rad;
-			renderer = render;
-		}
-};
-
-class TestComponent : public Component
-{
-	public:
-
-		void Tick()
-		{
-			printf("My gameobjects name: %s\n", gameObject->name.c_str());
-			//printf("Tick from test component!\n");
-		}
-};
 
 // GLOBALS
 SDL_Window* gWindow = NULL;
@@ -276,11 +138,7 @@ int main(int argc, char* args[]) {
 		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
 		rcc->gameObject = go;
 		go->components.push_back(rcc);
-/*
-		TestComponent* tc = new TestComponent(); 
-		tc->gameObject = go; // so we dont need to do this everytime
-		go->components.push_back(tc);*/
-
+		
 		GameObjects.push_back(go);
 	}
 
