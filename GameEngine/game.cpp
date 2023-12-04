@@ -1,202 +1,354 @@
-//Using SDL and standard IO
 #include <SDL.h>
-#include <stdio.h>
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <stdio.h>
+#include <math.h>
+#include <sstream>
+#include <vector>
+#include <ctime>
+#include <iostream>
+
+#define SCREEN_WIDTH 640
+#define SCREEN_HEIGHT 480
+
+// FORWARD DECLARATIONS
+class Component;
 
 
-//Screen dimension constants
-const int SCREEN_WIDTH = 1024;
-const int SCREEN_HEIGHT = 768;
 
-const char* pikachuImagePath{ "img/pikachu.png" };
+// CLASSES
 
-int main(int argc, char* args[])
+class Vector3
 {
+	public:
+		float x,y,z;
 
-	//The window we'll be rendering to
-	SDL_Window* window{};
-	SDL_Renderer* renderer; // the window's rendering surface
+		Vector3() : x(0), y(0), z(0) {}
+		Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
 
-	// initialize SDL_Image for image loading
-	int imgFlags = IMG_INIT_PNG;
-	if (!(IMG_Init(imgFlags) & imgFlags))
+		Vector3 operator+(const Vector3& other) const {
+			return Vector3(x+other.x, y+other.y, z+other.z);
+		}
+
+		Vector3 operator+=(const Vector3& other)
+		{
+			x += other.x;
+			y += other.y;
+			z += other.z;
+			return *this;
+		}
+
+		Vector3 operator*(float factor)
+		{
+			return Vector3(x*factor, y*factor, z*factor);
+		}
+
+		Vector3 operator*=(float factor)
+		{
+			x *= factor;
+			y *= factor;
+			z *= factor;
+			return *this;
+		}
+
+		Vector3 operator-(const Vector3& other) const {
+			return Vector3(x-other.x, y-other.y, z-other.z);
+		}
+
+		Vector3 operator-=(const Vector3& other)
+		{
+			x -= other.x;
+			y -= other.y;
+			z -= other.z;
+			return *this;
+		}
+
+		// TODO a bunch of operators still missing + stuff like DotProduct, Cross, Distance etc...
+		//
+		// look into not returning copies
+
+};
+
+class Transform
+{
+	public:
+		Vector3 position;
+
+		void Move(float dX, float dY, float dZ)
+		{
+			position.x += dX;
+			position.y += dY;
+			position.z += dZ;
+		}
+
+		void SetPosition(float X, float Y, float Z)
+		{
+			position.x = X;
+			position.y = Y;
+			position.z = Z;
+		}
+
+	// TODO add rotation and scale
+};
+
+class GameObject
+{
+	public:
+		std::string name;
+		Transform transform;
+		std::vector<Component*> components;
+		bool active = true;
+		bool visible = true;
+
+		GameObject(std::string inname = "GameObject"){
+			name = inname;
+		}
+
+};
+
+
+
+class Component
+{
+	public:
+		GameObject *gameObject;
+		virtual void Tick() = 0;
+};
+
+class RenderCircleComponent : public Component
+{
+	public:
+		SDL_Renderer* renderer;
+		int r, g, b;
+		int radius;
+		void Tick() {
+			SDL_SetRenderDrawColor(renderer, r, g, b, 255);
+
+			for (int y = -radius; y <= radius; y++)
+			{
+				for (int x = -radius; x <= radius; x++)
+				{
+					if ( (x * x) + (y * y) <= radius * radius) // if distance <= radius = we draw a pixel
+					{
+						SDL_RenderDrawPoint(renderer, gameObject->transform.position.x + x, gameObject->transform.position.y + y);
+					}
+				}
+			}
+		}
+
+		RenderCircleComponent(SDL_Renderer* render, int red, int green, int blue, int rad)
+		{
+			r = red;
+			g = green;
+			b = blue;
+			radius = rad;
+			renderer = render;
+		}
+};
+
+class TestComponent : public Component
+{
+	public:
+
+		void Tick()
+		{
+			printf("My gameobjects name: %s\n", gameObject->name.c_str());
+			//printf("Tick from test component!\n");
+		}
+};
+
+// GLOBALS
+SDL_Window* gWindow = NULL;
+SDL_Renderer* gRenderer = NULL;
+bool gQuit = false;
+std::vector<GameObject*> GameObjects;
+
+bool init()
+{
+	if(SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
-	}
-
-	// initialize SDL_ttf for font loading
-	if (TTF_Init() == -1)
-	{
-		printf("SDL_ttf could not initialize! SDL_ttf Error: %s\n", TTF_GetError());
-	}
-
-	//Start up SDL and create window
-	//Initialize SDL
-	if (SDL_Init(SDL_INIT_VIDEO))
-	{
-		printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
-		return -1;
-	}
-
-	// Create Window and Renderer
-	SDL_CreateWindowAndRenderer(SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_RESIZABLE, &window, &renderer);
-	if (!window)
-	{
-		printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
-		return -1;
-	}
-
-	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");  // make the scaled rendering look smoother.
-	SDL_RenderSetLogicalSize(renderer, 1024, 768);
-
-	// All data related to pikachu
-	SDL_Texture* pikachu = NULL; // The final optimized image
-	bool pikachuMoveRight = false;
-	int pik_x, pik_y;
-	pik_x = pik_y = 0;
-	int pik_w, pik_h;
-	pik_w = pik_h = 200;
-
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load(pikachuImagePath);
-	if (loadedSurface == NULL)
-	{
-		printf("Unable to load image %s! SDL_image Error: %s\n", pikachuImagePath, IMG_GetError());
-		return -1;
+		printf("SDL could not init. SDL Error: %s\n", SDL_GetError());
+		return false;
 	}
 	else
 	{
-		//Convert surface to screen format
-		pikachu = SDL_CreateTextureFromSurface(renderer, loadedSurface);
-		if (pikachu == NULL)
+		gWindow = SDL_CreateWindow("SDL gigachad", 
+				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if(gWindow == NULL)
 		{
-			printf("Unable to create texture from %s! SDL Error: %s\n", pikachuImagePath, SDL_GetError());
-			return -1;
+			printf("failed to create window. SDL Error: %s\n", SDL_GetError());
+			return false;
 		}
+		else
+		{
 
-		//Get rid of old loaded surface
-		SDL_FreeSurface(loadedSurface);
+			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if(!gRenderer)
+			{
+				printf("Failed to create renderer. %s", SDL_GetError());
+				return false;
+			}
+
+		}
+	}
+	return true;
+
+}
+
+void close()
+{
+	// closes the sdl program
+	SDL_DestroyRenderer(gRenderer);
+	gRenderer = NULL; // TODO test if these NULL's are necessary
+	SDL_DestroyWindow(gWindow);
+	gWindow = NULL;
+	SDL_Quit();
+}
+
+
+void InputCheck()
+{
+	SDL_Event event;
+	while(SDL_PollEvent(&event) != 0){
+		if(event.type == SDL_QUIT) // this seems to trigger when you hit the X in windows etc.
+		{
+			gQuit = true;
+		}
+		else if (event.type ==  SDL_MOUSEBUTTONDOWN)
+		{
+			switch(event.button.button)
+			{
+				case SDL_BUTTON_LEFT:
+					SDL_Log("left click");
+					break;
+				case SDL_BUTTON_RIGHT:
+					SDL_Log("Right click");
+					break;
+				case SDL_BUTTON_MIDDLE:
+					SDL_Log("Middle click");
+					break;
+			}
+		}
+		else if (event.type == SDL_KEYDOWN)
+		{
+			//SDL_Log("%s pressed", SDL_GetKeyName(event.key.keysym.sym));
+			switch(event.key.keysym.sym){
+				case SDLK_ESCAPE:
+					gQuit=true;
+					break;
+				case SDLK_f:
+					SDL_Log("F pressed");
+					break;
+
+			}
+		}
+	}
+}
+
+
+int rng(int lower, int upper)
+{
+	int range = upper - lower + 1;
+	int num = std::rand() % range + lower;
+	return num;
+}
+
+
+int main(int argc, char* args[]) {
+	if(init() == false)
+	{
+		// something failed to initialize, we die
+		return 1;
 	}
 
-	// load font
-	auto font = TTF_OpenFont("font/lazy.ttf", 100);
-	if (font == NULL)
+
+	// create a bunch of game objects
+	for(int i = 0; i < 100; i++)
 	{
-		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
-		return -1;
+		GameObject* go = new GameObject("random object");
+		int r = rng(0,500);
+		int r2 = rng(0,500);
+		int rcolor = rng(0,255);
+		int rsize = rng(5,20);
+		go->transform.position = Vector3(r,r2,0);
+
+		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
+		rcc->gameObject = go;
+		go->components.push_back(rcc);
+/*
+		TestComponent* tc = new TestComponent(); 
+		tc->gameObject = go; // so we dont need to do this everytime
+		go->components.push_back(tc);*/
+
+		GameObjects.push_back(go);
 	}
 
-	// create text from font
-	SDL_Color textColor = { 0xff, 0xff, 0xff };
-	//Render text surface
-	SDL_Texture* textTexture; // The final optimized image
+	// create a GameObject
+	GameObject* A = new GameObject("GameObject A");
+	A->transform.position = Vector3(100,100,0);
 
-	// render the text into an unoptimized CPU surface
-	SDL_Surface* textSurface = TTF_RenderText_Solid(font, "The lazy fox, blah blah", textColor);
-	int textWidth, textHeight;
-	if (textSurface == NULL)
+	// add some components to it
+	RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, 0,255,0,10);
+	rcc->gameObject = A;
+	A->components.push_back(rcc);
+
+	TestComponent* tc = new TestComponent(); // TODO should try to push our gameobject in the constructor
+	tc->gameObject = A; // so we dont need to do this everytime
+	A->components.push_back(tc);
+
+	GameObjects.push_back(A); // add it to the global GameObjects array (vector actually)
+
+	// another GameObject...
+	GameObject* B = new GameObject("B");
+	B->transform.position = Vector3(0,0,0);
+	RenderCircleComponent* rcc2 = new RenderCircleComponent(gRenderer, 255,0,0, 15);
+	rcc2->gameObject = B;
+	B->components.push_back(rcc2);
+
+	TestComponent* tc2 = new TestComponent();
+	tc2->gameObject = B;
+	B->components.push_back(tc2);
+
+	GameObjects.push_back(B);
+
+	while(!gQuit)
 	{
-		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
-		return -1;
-	}
-	else
-	{
-		// Create texture GPU-stored texture from surface pixels
-		textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-		if (textTexture == NULL)
-		{
-			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
-			return -1;
-		}
-		// Get image dimensions
-		auto width = textSurface->w;
-		auto height = textSurface->h;
-		textWidth = textSurface->w;
-		textHeight = textSurface->h;
-		//Get rid of old loaded surface
-		SDL_FreeSurface(textSurface);
-	}
+		SDL_RenderClear(gRenderer);
 
-	SDL_Event e; bool quit = false;
-
-	// while the user doesn't want to quit
-	while (quit == false)
-	{
-		SDL_GetTicks(); // can be used, to see, how much time in ms has passed since app start
-
-
-		// loop through all pending events from Windows (OS)
-		while (SDL_PollEvent(&e))
-		{
-			// check, if it's an event we want to react to:
-			switch (e.type) {
-				case SDL_QUIT: {
-					quit = true;
-				} break;
-
-					// This is an example on how to use input events:
-				case SDL_KEYDOWN: {
-					// input example: if left, then make pikachu move left
-					if (e.key.keysym.sym == SDLK_LEFT) {
-						pikachuMoveRight = false;
-					}
-					// if right, then make pikachu move right
-					if (e.key.keysym.sym == SDLK_RIGHT) {
-						pikachuMoveRight = true;
-					}
-				} break;
-			} 
-		}
-
-		// This is an example for how to check, whether keys are currently pressed:
-		const Uint8* keystate = SDL_GetKeyboardState(NULL);
-		if (keystate[SDL_SCANCODE_UP])
-		{
-			pik_y--;
-		}
-		if (keystate[SDL_SCANCODE_DOWN])
-		{
-			pik_y++;
-		}
-
-		// our current game logic :)
-		if (pikachuMoveRight) {
-			pik_x++;
-			if (pik_x > 599) pikachuMoveRight = false;
-		}
-		else {
-			pik_x--;
-			if (pik_x < 1) pikachuMoveRight = true;
-		}
+		// main loop
 		
-		// clear the screen
-		SDL_SetRenderDrawColor(renderer, 120, 60, 255, 255);
-		SDL_RenderClear(renderer);
-		
-		// render Pikachu
-		SDL_Rect targetRectangle{
-			pik_x,
-			pik_y,
-			pik_w,
-			pik_h
-		};
-		SDL_RenderCopy(renderer, pikachu, NULL, &targetRectangle);
+		for(auto & go : GameObjects) // Iterate over all GameObjects
+		{
+			// Iterate over all components on the GameObject and run their Tick()
+			for(auto & component : go->components)
+			{
+				component->Tick();
+			}
 
-		// render the text
-		targetRectangle = SDL_Rect{
-			500,
-			500,
-			textWidth,
-			textHeight
-		};
-		SDL_RenderCopy(renderer, textTexture, NULL, &targetRectangle);
+			go->transform.position += Vector3(2,1,0);
+			go->transform.position *= 1.01;
 
-		// present screen (switch buffers)
-		SDL_RenderPresent(renderer);
+			// clamp to screen
+			if(go->transform.position.x > SCREEN_WIDTH){
+				go->transform.position.x = 0;
+			}
+			if(go->transform.position.y > SCREEN_HEIGHT)
+			{
+				go->transform.position.y = 0;
+			}
+		}
 
-		SDL_Delay(0); // can be used to wait for a certain amount of ms
+		// restore draw color to black so the background remains black
+		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+
+		// and finally present the frame
+		SDL_RenderPresent(gRenderer);
+
+		InputCheck();
+
 	}
 
+	close();
 	return 0;
 }
