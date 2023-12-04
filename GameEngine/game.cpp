@@ -15,6 +15,7 @@
 #include "Vector3.h"
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
+#include "Random.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -109,12 +110,7 @@ void InputCheck()
 }
 
 
-int rng(int lower, int upper)
-{
-	int range = upper - lower + 1;
-	int num = std::rand() % range + lower;
-	return num;
-}
+
 
 
 int main(int argc, char* args[]) {
@@ -129,10 +125,10 @@ int main(int argc, char* args[]) {
 	for(int i = 0; i < 100; i++)
 	{
 		GameObject* go = new GameObject("random object");
-		int r = rng(0,500);
-		int r2 = rng(0,500);
-		int rcolor = rng(0,255);
-		int rsize = rng(5,20);
+		int r = Random::RandomIntInRange(0,500);
+		int r2 = Random::RandomIntInRange(0,500);
+		int rcolor = Random::RandomIntInRange(0,255);
+		int rsize = Random::RandomIntInRange(5,20);
 		go->transform.position = Vector3(r,r2,0);
 
 		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
