@@ -19,6 +19,10 @@ void Graphics::ClearFrame()
 
 void Graphics::PresentFrame()
 {
+	for (RenderObject* s : RenderObjects)
+	{
+		s->Render();
+	}
 	SDL_RenderPresent(renderer);
 }
 
