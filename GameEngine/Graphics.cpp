@@ -11,18 +11,18 @@ int screen_height;
 
 bool initDone = false;
 
-void GraphicsLib::ClearFrame()
+void Graphics::ClearFrame()
 {
 	SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
 	SDL_RenderClear(renderer);
 }
 
-void GraphicsLib::PresentFrame()
+void Graphics::PresentFrame()
 {
 	SDL_RenderPresent(renderer);
 }
 
-bool GraphicsLib::Initialize(const char* windowTitle, int Width, int Height)
+bool Graphics::Initialize(const char* windowTitle, int Width, int Height)
 {
 	if (initDone) return false;
 
@@ -68,7 +68,7 @@ bool GraphicsLib::Initialize(const char* windowTitle, int Width, int Height)
 	return ok;
 }
 
-void GraphicsLib::Exit()
+void Graphics::Exit()
 {
 	if (initDone)
 	{
@@ -92,14 +92,14 @@ RenderObject::~RenderObject()
 	RenderObjects.erase(this);
 }
 
-void GraphicsLib::RenderSquare(int x, int y, int width, int height, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void Graphics::RenderSquare(int x, int y, int width, int height, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 	SDL_Rect rect = SDL_Rect(x, y, width, height);
 	SDL_RenderFillRect(renderer, &rect);
 }
 
-void GraphicsLib::RenderCircle(int x, int y, int radius, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+void Graphics::RenderCircle(int x, int y, int radius, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);
 

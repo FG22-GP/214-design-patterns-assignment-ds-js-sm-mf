@@ -27,12 +27,12 @@ std::vector<GameObject*> GameObjects;
 
 bool init()
 {
-	return GraphicsLib::Initialize("test");
+	return Graphics::Initialize("test");
 }
 
 void close()
 {
-	GraphicsLib::Exit();
+	Graphics::Exit();
 }
 
 
@@ -134,7 +134,7 @@ int main(int argc, char* args[]) {
 
 	while(!gQuit)
 	{
-		GraphicsLib::ClearFrame();
+		Graphics::ClearFrame();
 
 		// main loop
 		
@@ -160,7 +160,7 @@ int main(int argc, char* args[]) {
 		}
 
 		
-		GraphicsLib::PresentFrame();
+		Graphics::PresentFrame();
 
 		InputCheck();
 

@@ -7,7 +7,7 @@
 
 class RenderObject;
 
-class GraphicsLib
+class Graphics
 {
 public:
 	static bool Initialize(const char* windowTitle, int Width = 640, int Height = 480);
