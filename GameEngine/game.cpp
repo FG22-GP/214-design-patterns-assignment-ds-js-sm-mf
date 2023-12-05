@@ -16,57 +16,23 @@
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
+#include "Graphics.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
 // GLOBALS
-SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
 bool gQuit = false;
 std::vector<GameObject*> GameObjects;
 
 bool init()
 {
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not init. SDL Error: %s\n", SDL_GetError());
-		return false;
-	}
-	else
-	{
-		gWindow = SDL_CreateWindow("SDL gigachad", 
-				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if(gWindow == NULL)
-		{
-			printf("failed to create window. SDL Error: %s\n", SDL_GetError());
-			return false;
-		}
-		else
-		{
-
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if(!gRenderer)
-			{
-				printf("Failed to create renderer. %s", SDL_GetError());
-				return false;
-			}
-
-		}
-	}
-	return true;
-
+	return GraphicsLib::Initialize("test");
 }
 
 void close()
 {
-	// closes the sdl program
-	SDL_DestroyRenderer(gRenderer);
-	gRenderer = NULL; // TODO test if these NULL's are necessary
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	SDL_Quit();
+	GraphicsLib::Exit();
 }
 
 
@@ -131,7 +97,7 @@ int main(int argc, char* args[]) {
 		int rsize = Random::RandomIntInRange(5,20);
 		go->transform.position = Vector3(r,r2,0);
 
-		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
+		RenderCircleComponent* rcc = new RenderCircleComponent(rcolor, 128,128, rsize);
 		rcc->gameObject = go;
 		go->components.push_back(rcc);
 		
@@ -143,7 +109,7 @@ int main(int argc, char* args[]) {
 	A->transform.position = Vector3(100,100,0);
 
 	// add some components to it
-	RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, 0,255,0,10);
+	RenderCircleComponent* rcc = new RenderCircleComponent(0,255,0,10);
 	rcc->gameObject = A;
 	A->components.push_back(rcc);
 
@@ -156,7 +122,7 @@ int main(int argc, char* args[]) {
 	// another GameObject...
 	GameObject* B = new GameObject("B");
 	B->transform.position = Vector3(0,0,0);
-	RenderCircleComponent* rcc2 = new RenderCircleComponent(gRenderer, 255,0,0, 15);
+	RenderCircleComponent* rcc2 = new RenderCircleComponent(255,0,0, 15);
 	rcc2->gameObject = B;
 	B->components.push_back(rcc2);
 
@@ -168,7 +134,7 @@ int main(int argc, char* args[]) {
 
 	while(!gQuit)
 	{
-		SDL_RenderClear(gRenderer);
+		GraphicsLib::ClearFrame();
 
 		// main loop
 		
@@ -193,11 +159,8 @@ int main(int argc, char* args[]) {
 			}
 		}
 
-		// restore draw color to black so the background remains black
-		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-
-		// and finally present the frame
-		SDL_RenderPresent(gRenderer);
+		
+		GraphicsLib::PresentFrame();
 
 		InputCheck();
 
