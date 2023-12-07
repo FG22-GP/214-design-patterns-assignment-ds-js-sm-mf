@@ -186,7 +186,7 @@ int main(int argc, char* args[]) {
 			}
 
 			// move the game object
-			go->transform.position += Vector2(5,5) * DELTATIME;
+			go->transform.position += Vector2(50,50) * DELTATIME;
 
 			// clamp to screen
 			if(go->transform.position.x > SCREEN_WIDTH){
