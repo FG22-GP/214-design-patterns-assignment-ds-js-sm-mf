@@ -23,6 +23,6 @@ class GameObject
 			GAMEOBJECTS.push_back(this);
 		}
 	
-		virtual void Start() = 0;
-		virtual void Tick() = 0;
+		virtual void Start();
+		virtual void Tick();
 };

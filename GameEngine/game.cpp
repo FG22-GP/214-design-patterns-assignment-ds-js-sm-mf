@@ -16,6 +16,7 @@
 #include "Components/TestComponent.h"
 #include "Random.h"
 #include "Global.h"
+#include "GameObjects/TestGameObject.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
@@ -158,6 +159,9 @@ int main(int argc, char* args[]) {
 		// ...no need to add it here anymore :)
 	}
 
+	// add our TestGameObject
+	TestGameObject* testGO = new TestGameObject();
+
 	// run Start() on all game objects
 	for(auto & go : GAMEOBJECTS)
 	{
@@ -185,13 +189,7 @@ int main(int argc, char* args[]) {
 				continue; // this gameobject is inactive, dont do anything
 			}
 
-			go->Tick();
-			
-			// Iterate over all components on the GameObject and run their Tick()
-			for(auto & component : go->components)
-			{
-				component->Tick();
-			}
+			go->Tick(); // tick the game object (and its components) 
 
 			// move the game object
 			go->transform.position += Vector2(50,50) * DELTATIME;
