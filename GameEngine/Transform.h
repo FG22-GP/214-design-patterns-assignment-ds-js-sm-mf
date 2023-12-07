@@ -1,14 +1,12 @@
 ﻿#pragma once
-#include "Vector3.h"
-
-// TODO add rotation and scale
+#include "Vector2.h"
 
 
 class Transform
 {
 public:
-    Vector3 position;
+    Vector2 position;
 
-    void Move(float dX, float dY, float dZ);
-    void SetPosition(float X, float Y, float Z);
+    void Move(float dX, float dY);
+    void SetPosition(float X, float Y);
 };

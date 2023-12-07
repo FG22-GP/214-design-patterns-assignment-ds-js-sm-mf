@@ -12,7 +12,6 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
-#include "Vector3.h"
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
@@ -129,7 +128,7 @@ int main(int argc, char* args[]) {
 		int r2 = Random::RandomIntInRange(0,500);
 		int rcolor = Random::RandomIntInRange(0,255);
 		int rsize = Random::RandomIntInRange(5,20);
-		go->transform.position = Vector3(r,r2,0);
+		go->transform.position = Vector2(r,r2);
 
 		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
 		rcc->gameObject = go;
@@ -137,34 +136,6 @@ int main(int argc, char* args[]) {
 		
 		GameObjects.push_back(go);
 	}
-
-	// create a GameObject
-	GameObject* A = new GameObject("GameObject A");
-	A->transform.position = Vector3(100,100,0);
-
-	// add some components to it
-	RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, 0,255,0,10);
-	rcc->gameObject = A;
-	A->components.push_back(rcc);
-
-	TestComponent* tc = new TestComponent(); // TODO should try to push our gameobject in the constructor
-	tc->gameObject = A; // so we dont need to do this everytime
-	A->components.push_back(tc);
-
-	GameObjects.push_back(A); // add it to the global GameObjects array (vector actually)
-
-	// another GameObject...
-	GameObject* B = new GameObject("B");
-	B->transform.position = Vector3(0,0,0);
-	RenderCircleComponent* rcc2 = new RenderCircleComponent(gRenderer, 255,0,0, 15);
-	rcc2->gameObject = B;
-	B->components.push_back(rcc2);
-
-	TestComponent* tc2 = new TestComponent();
-	tc2->gameObject = B;
-	B->components.push_back(tc2);
-
-	GameObjects.push_back(B);
 
 	while(!gQuit)
 	{
@@ -180,7 +151,7 @@ int main(int argc, char* args[]) {
 				component->Tick();
 			}
 
-			go->transform.position += Vector3(2,1,0);
+			go->transform.position += Vector2(2,1);
 			go->transform.position *= 1.01;
 
 			// clamp to screen
