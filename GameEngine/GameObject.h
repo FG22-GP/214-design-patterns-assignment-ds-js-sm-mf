@@ -17,6 +17,7 @@ class GameObject
 		bool active = true;
 		bool visible = true;
 
+
 		GameObject(std::string inName = "GameObject", Transform inTransform = Transform(Vector2(0,0))){
 			name = inName;
 			transform = inTransform;
@@ -26,4 +27,5 @@ class GameObject
 		virtual void Start();
 		virtual void Tick();
 		void AddComponent(Component* NewComponent);
+		void Destroy();
 };
