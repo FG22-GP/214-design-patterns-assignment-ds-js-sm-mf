@@ -15,17 +15,16 @@
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
+#include "Global.h"
 
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
-double DELTATIME;
 
 // GLOBALS
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
 bool gQuit = false;
-std::vector<GameObject*> GameObjects;
 
 bool init()
 {
@@ -141,11 +140,10 @@ int main(int argc, char* args[]) {
 		go->components.push_back(rcc);
 
 		// the test component just spams the gameobject name deltatime
-//		TestComponent* tcc = new TestComponent();
-//		tcc->gameObject = go;
-//		go->components.push_back(tcc);
+		TestComponent* tcc = new TestComponent();
+		tcc->gameObject = go;
+		go->components.push_back(tcc);
 		
-		GameObjects.push_back(go);
 	}
 
 	while(!gQuit)
@@ -159,12 +157,12 @@ int main(int argc, char* args[]) {
 		NOW = SDL_GetPerformanceCounter();
 		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
 		
-		for(auto & go : GameObjects) // Iterate over all GameObjects
+		for(auto & go : GAMEOBJECTS) // Iterate over all GameObjects
 		{
 			// Iterate over all components on the GameObject and run their Tick()
 			for(auto & component : go->components)
 			{
-				component->Tick(DELTATIME);
+				component->Tick();
 			}
 
 			go->transform.position += Vector2(20,5) * DELTATIME;

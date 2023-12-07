@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 
+#include "Global.h"
 #include "Transform.h"
 
 class Component; // forward declaration
@@ -17,6 +18,7 @@ class GameObject
 
 		GameObject(std::string inname = "GameObject"){
 			name = inname;
+			GAMEOBJECTS.push_back(this);
 		}
 
 };

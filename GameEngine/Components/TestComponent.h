@@ -5,6 +5,6 @@
 class TestComponent : public Component
 {
 	public:
-		void Tick(double DeltaTime);
+		void Tick();
 
 };

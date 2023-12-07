@@ -6,5 +6,5 @@ class Component
 	public:
 	virtual ~Component() = default;
 	GameObject *gameObject;
-		virtual void Tick(double DeltaTime) = 0;
+		virtual void Tick() = 0;
 };
