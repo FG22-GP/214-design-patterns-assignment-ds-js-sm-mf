@@ -1,7 +1,5 @@
 ﻿#pragma once
 #include "../Component.h"
-#include <SDL.h>
-#include "../Global.h" 
 
 class RenderCircleComponent : public Component
 {

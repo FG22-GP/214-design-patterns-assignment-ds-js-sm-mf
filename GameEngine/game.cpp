@@ -15,56 +15,23 @@
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
+#include "Graphics.h"
 #include "Global.h"
 #include "GameObjects/Ball.h"
 #include "GameObjects/TestGameObject.h"
 
 
 // GLOBALS
-SDL_Window* gWindow = NULL;
 bool gQuit = false;
 
 bool init()
 {
-	if(SDL_Init(SDL_INIT_VIDEO) < 0)
-	{
-		printf("SDL could not init. SDL Error: %s\n", SDL_GetError());
-		return false;
-	}
-	else
-	{
-		gWindow = SDL_CreateWindow("SDL gigachad", 
-				SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-				SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
-		if(gWindow == NULL)
-		{
-			printf("failed to create window. SDL Error: %s\n", SDL_GetError());
-			return false;
-		}
-		else
-		{
-
-			G_RENDERER = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if(!G_RENDERER)
-			{
-				printf("Failed to create renderer. %s", SDL_GetError());
-				return false;
-			}
-
-		}
-	}
-	return true;
-
+	return Graphics::Initialize("test");
 }
 
 void close()
 {
-	// closes the sdl program
-	SDL_DestroyRenderer(G_RENDERER);
-	G_RENDERER = NULL; // TODO test if these NULL's are necessary
-	SDL_DestroyWindow(gWindow);
-	gWindow = NULL;
-	SDL_Quit();
+	Graphics::Exit();
 }
 
 
@@ -157,7 +124,7 @@ int main(int argc, char* args[]) {
 
 	while(!gQuit) // main loop
 	{
-		SDL_RenderClear(G_RENDERER);
+		Graphics::ClearFrame();
 
 		// calculate DT
 		LAST = NOW;
@@ -178,11 +145,8 @@ int main(int argc, char* args[]) {
 			go->Tick(); // tick the game object (and its components) 
 		}
 
-		// restore draw color to black so the background remains black
-		SDL_SetRenderDrawColor(G_RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
-		// and finally present the frame
-		SDL_RenderPresent(G_RENDERER);
+		Graphics::PresentFrame();
 
 		InputCheck();
 

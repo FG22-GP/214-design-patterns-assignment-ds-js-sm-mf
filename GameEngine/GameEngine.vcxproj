@@ -32,6 +32,7 @@
     <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GameObjects\Ball.cpp" />
     <ClCompile Include="GameObjects\TestGameObject.cpp" />
     <ClCompile Include="Global.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Components\RenderCircleComponent.h" />
     <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Graphics.h" />
     <ClInclude Include="GameObjects\Ball.h" />
     <ClInclude Include="GameObjects\TestGameObject.h" />
     <ClInclude Include="Global.h" />
