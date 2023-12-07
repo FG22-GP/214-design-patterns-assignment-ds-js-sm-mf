@@ -12,18 +12,17 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
-#include "Vector3.h"
 #include "Components/RenderCircleComponent.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
 #include "Graphics.h"
+#include "Global.h"
+#include "GameObjects/Ball.h"
+#include "GameObjects/TestGameObject.h"
 
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
 
 // GLOBALS
 bool gQuit = false;
-std::vector<GameObject*> GameObjects;
 
 bool init()
 {
@@ -86,80 +85,67 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
+	// initialize DeltaTime calculation https://gamedev.stackexchange.com/a/110831
+	std::string WindowTitle = "FPS: xxx";
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
 
-	// create a bunch of game objects
+	// initialize randomness
+	srand(time(nullptr));
+
+	// add stuff to the "scene"
+	
+	// add a bunch of balls 
 	for(int i = 0; i < 100; i++)
 	{
-		GameObject* go = new GameObject("random object");
-		int r = Random::RandomIntInRange(0,500);
-		int r2 = Random::RandomIntInRange(0,500);
-		int rcolor = Random::RandomIntInRange(0,255);
+		int r1 = Random::RandomIntInRange(0,255);
+		int r2 = Random::RandomIntInRange(0,255);
+		int r3 = Random::RandomIntInRange(0,255);
 		int rsize = Random::RandomIntInRange(5,20);
-		go->transform.position = Vector3(r,r2,0);
+		int rx = Random::RandomIntInRange(0, SCREEN_WIDTH);
+		int ry = Random::RandomIntInRange(0, SCREEN_HEIGHT);
 
-		RenderCircleComponent* rcc = new RenderCircleComponent(rcolor, 128,128, rsize);
-		rcc->gameObject = go;
-		go->components.push_back(rcc);
-		
-		GameObjects.push_back(go);
+		Ball* b = new Ball(Transform(Vector2(rx,ry)), r1, r2, r3, rsize);
 	}
 
-	// create a GameObject
-	GameObject* A = new GameObject("GameObject A");
-	A->transform.position = Vector3(100,100,0);
+	// add TestGameObject 
+	//TestGameObject* testGO = new TestGameObject();
 
-	// add some components to it
-	RenderCircleComponent* rcc = new RenderCircleComponent(0,255,0,10);
-	rcc->gameObject = A;
-	A->components.push_back(rcc);
+	/*
+	 * at this point the "scene" should have all the gameobjects in it,
+	 * as we're about to run Start() and then proceed to the main loop
+	 */
+	
+	// run Start() on all game objects
+	for(auto & go : GAMEOBJECTS)
+	{
+		go->Start();
+	}
 
-	TestComponent* tc = new TestComponent(); // TODO should try to push our gameobject in the constructor
-	tc->gameObject = A; // so we dont need to do this everytime
-	A->components.push_back(tc);
-
-	GameObjects.push_back(A); // add it to the global GameObjects array (vector actually)
-
-	// another GameObject...
-	GameObject* B = new GameObject("B");
-	B->transform.position = Vector3(0,0,0);
-	RenderCircleComponent* rcc2 = new RenderCircleComponent(255,0,0, 15);
-	rcc2->gameObject = B;
-	B->components.push_back(rcc2);
-
-	TestComponent* tc2 = new TestComponent();
-	tc2->gameObject = B;
-	B->components.push_back(tc2);
-
-	GameObjects.push_back(B);
-
-	while(!gQuit)
+	while(!gQuit) // main loop
 	{
 		Graphics::ClearFrame();
 
-		// main loop
+		// calculate DT
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
+
+		// put fps/dt in window title
+		WindowTitle = "FPS: " + std::to_string(1/DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
+		SDL_SetWindowTitle(gWindow, WindowTitle.c_str()); // put fps in window title
 		
-		for(auto & go : GameObjects) // Iterate over all GameObjects
+		for(auto & go : GAMEOBJECTS) // Iterate over all GameObjects
 		{
-			// Iterate over all components on the GameObject and run their Tick()
-			for(auto & component : go->components)
+			if(go->active == false)
 			{
-				component->Tick();
+				continue; // this gameobject is inactive, dont do anything
 			}
 
-			go->transform.position += Vector3(2,1,0);
-			go->transform.position *= 1.01;
-
-			// clamp to screen
-			if(go->transform.position.x > SCREEN_WIDTH){
-				go->transform.position.x = 0;
-			}
-			if(go->transform.position.y > SCREEN_HEIGHT)
-			{
-				go->transform.position.y = 0;
-			}
+			go->Tick(); // tick the game object (and its components) 
 		}
 
-		
+
 		Graphics::PresentFrame();
 
 		InputCheck();

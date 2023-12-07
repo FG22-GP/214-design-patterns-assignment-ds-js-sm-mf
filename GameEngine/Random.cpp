@@ -6,3 +6,12 @@ int Random::RandomIntInRange(int lower, int upper)
 	int num = std::rand() % range + lower;
 	return num;
 }
+
+bool Random::RandomBool()
+{
+	if (std::rand() % 2 == 0)
+	{
+		return true;
+	}
+	return false;
+}

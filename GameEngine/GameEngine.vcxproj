@@ -33,6 +33,9 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="GameObjects\Ball.cpp" />
+    <ClCompile Include="GameObjects\TestGameObject.cpp" />
+    <ClCompile Include="Global.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Transform.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -108,7 +111,7 @@
       <SDLCheck>true</SDLCheck>
       <LinkCompiled>true</LinkCompiled>
     </ClCompile>
-    <ClCompile Include="Vector3.cpp" />
+    <ClCompile Include="Vector2.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
@@ -116,9 +119,12 @@
     <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="GameObjects\Ball.h" />
+    <ClInclude Include="GameObjects\TestGameObject.h" />
+    <ClInclude Include="Global.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Transform.h" />
-    <ClInclude Include="Vector3.h" />
+    <ClInclude Include="Vector2.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>

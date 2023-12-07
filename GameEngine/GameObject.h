@@ -2,7 +2,9 @@
 #include <string>
 #include <vector>
 
+#include "Global.h"
 #include "Transform.h"
+#include "Vector2.h"
 
 class Component; // forward declaration
 
@@ -15,8 +17,15 @@ class GameObject
 		bool active = true;
 		bool visible = true;
 
-		GameObject(std::string inname = "GameObject"){
-			name = inname;
-		}
 
+		GameObject(std::string inName = "GameObject", Transform inTransform = Transform(Vector2(0,0))){
+			name = inName;
+			transform = inTransform;
+			GAMEOBJECTS.push_back(this);
+		}
+	
+		virtual void Start();
+		virtual void Tick();
+		void AddComponent(Component* NewComponent);
+		void Destroy();
 };

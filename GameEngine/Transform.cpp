@@ -1,17 +1,15 @@
 ﻿#include "Transform.h"
 
 
-void Transform::Move(float dX, float dY, float dZ)
+void Transform::Move(float dX, float dY)
 {
 	position.x += dX;
 	position.y += dY;
-	position.z += dZ;
 }
 
-void Transform::SetPosition(float X, float Y, float Z)
+void Transform::SetPosition(float X, float Y)
 {
 	position.x = X;
 	position.y = Y;
-	position.z = Z;
 }
 
