@@ -120,30 +120,42 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
-	// DeltaTime calculation https://gamedev.stackexchange.com/a/110831
+	// initialize DeltaTime calculation https://gamedev.stackexchange.com/a/110831
+	std::string WindowTitle = "FPS: xxx";
 	Uint64 NOW = SDL_GetPerformanceCounter();
 	Uint64 LAST = 0;
 
+	// initialize randomness
+	srand(time(nullptr));
+	
 
 	// create a bunch of game objects
 	for(int i = 0; i < 100; i++)
 	{
-		GameObject* go = new GameObject("random object");
-		int r = Random::RandomIntInRange(0,500);
-		int r2 = Random::RandomIntInRange(0,500);
-		int rcolor = Random::RandomIntInRange(0,255);
+		int r1 = Random::RandomIntInRange(0,255);
+		int r2 = Random::RandomIntInRange(0,255);
+		int r3 = Random::RandomIntInRange(0,255);
 		int rsize = Random::RandomIntInRange(5,20);
-		go->transform.position = Vector2(r,r2);
+		int rx = Random::RandomIntInRange(0, SCREEN_WIDTH);
+		int ry = Random::RandomIntInRange(0, SCREEN_HEIGHT);
 
-		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
+		// create game object with name and position
+		GameObject* go = new GameObject("Random Game Object " + std::to_string(i), Vector2(rx,ry));
+		//go->transform.position = Vector2(rx,ry); // can also set position like this
+
+		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, r1, r2,r3, rsize);
 		rcc->gameObject = go;
 		go->components.push_back(rcc);
 
-		// the test component just spams the gameobject name deltatime
+		// the test component just spams the gameobject name deltatime (useful for testing)
+		/*
 		TestComponent* tcc = new TestComponent();
 		tcc->gameObject = go;
 		go->components.push_back(tcc);
-		
+		*/
+
+		// game object gets added to global GAMEOBJECTS array in GameObject constructor...
+		// ...no need to add it here anymore :)
 	}
 
 	while(!gQuit)
@@ -156,16 +168,25 @@ int main(int argc, char* args[]) {
 		LAST = NOW;
 		NOW = SDL_GetPerformanceCounter();
 		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
+
+		WindowTitle = "FPS: " + std::to_string(1/DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
+		SDL_SetWindowTitle(gWindow, WindowTitle.c_str()); // put fps in window title
 		
 		for(auto & go : GAMEOBJECTS) // Iterate over all GameObjects
 		{
+			if(go->active == false)
+			{
+				continue; // this gameobject is inactive, dont do anything
+			}
+			
 			// Iterate over all components on the GameObject and run their Tick()
 			for(auto & component : go->components)
 			{
 				component->Tick();
 			}
 
-			go->transform.position += Vector2(20,5) * DELTATIME;
+			// move the game object
+			go->transform.position += Vector2(5,5) * DELTATIME;
 
 			// clamp to screen
 			if(go->transform.position.x > SCREEN_WIDTH){

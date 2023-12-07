@@ -9,4 +9,9 @@ public:
 
     void Move(float dX, float dY);
     void SetPosition(float X, float Y);
+
+    Transform(Vector2 inPosition = Vector2(0,0))
+    {
+        position = inPosition;
+    }
 };
