@@ -158,6 +158,12 @@ int main(int argc, char* args[]) {
 		// ...no need to add it here anymore :)
 	}
 
+	// run Start() on all game objects
+	for(auto & go : GAMEOBJECTS)
+	{
+		go->Start();
+	}
+
 	while(!gQuit)
 	{
 		SDL_RenderClear(gRenderer);
@@ -178,6 +184,8 @@ int main(int argc, char* args[]) {
 			{
 				continue; // this gameobject is inactive, dont do anything
 			}
+
+			go->Tick();
 			
 			// Iterate over all components on the GameObject and run their Tick()
 			for(auto & component : go->components)
