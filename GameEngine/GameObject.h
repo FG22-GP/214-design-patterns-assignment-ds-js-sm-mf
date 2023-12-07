@@ -25,4 +25,5 @@ class GameObject
 	
 		virtual void Start();
 		virtual void Tick();
+		void AddComponent(Component* NewComponent);
 };

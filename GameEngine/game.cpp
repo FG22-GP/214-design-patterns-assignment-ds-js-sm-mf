@@ -16,15 +16,12 @@
 #include "Components/TestComponent.h"
 #include "Random.h"
 #include "Global.h"
+#include "GameObjects/Ball.h"
 #include "GameObjects/TestGameObject.h"
-
-#define SCREEN_WIDTH 640
-#define SCREEN_HEIGHT 480
 
 
 // GLOBALS
 SDL_Window* gWindow = NULL;
-SDL_Renderer* gRenderer = NULL;
 bool gQuit = false;
 
 bool init()
@@ -47,8 +44,8 @@ bool init()
 		else
 		{
 
-			gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-			if(!gRenderer)
+			G_RENDERER = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+			if(!G_RENDERER)
 			{
 				printf("Failed to create renderer. %s", SDL_GetError());
 				return false;
@@ -63,8 +60,8 @@ bool init()
 void close()
 {
 	// closes the sdl program
-	SDL_DestroyRenderer(gRenderer);
-	gRenderer = NULL; // TODO test if these NULL's are necessary
+	SDL_DestroyRenderer(G_RENDERER);
+	G_RENDERER = NULL; // TODO test if these NULL's are necessary
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	SDL_Quit();
@@ -128,9 +125,10 @@ int main(int argc, char* args[]) {
 
 	// initialize randomness
 	srand(time(nullptr));
-	
 
-	// create a bunch of game objects
+	// add stuff to the "scene"
+	
+	// add a bunch of balls 
 	for(int i = 0; i < 100; i++)
 	{
 		int r1 = Random::RandomIntInRange(0,255);
@@ -140,45 +138,33 @@ int main(int argc, char* args[]) {
 		int rx = Random::RandomIntInRange(0, SCREEN_WIDTH);
 		int ry = Random::RandomIntInRange(0, SCREEN_HEIGHT);
 
-		// create game object with name and position
-		GameObject* go = new GameObject("Random Game Object " + std::to_string(i), Vector2(rx,ry));
-		//go->transform.position = Vector2(rx,ry); // can also set position like this
-
-		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, r1, r2,r3, rsize);
-		rcc->gameObject = go;
-		go->components.push_back(rcc);
-
-		// the test component just spams the gameobject name deltatime (useful for testing)
-		/*
-		TestComponent* tcc = new TestComponent();
-		tcc->gameObject = go;
-		go->components.push_back(tcc);
-		*/
-
-		// game object gets added to global GAMEOBJECTS array in GameObject constructor...
-		// ...no need to add it here anymore :)
+		Ball* b = new Ball(Transform(Vector2(rx,ry)), r1, r2, r3, rsize);
 	}
 
-	// add our TestGameObject
-	TestGameObject* testGO = new TestGameObject();
+	// add TestGameObject 
+	//TestGameObject* testGO = new TestGameObject();
 
+	/*
+	 * at this point the "scene" should have all the gameobjects in it,
+	 * as we're about to run Start() and then proceed to the main loop
+	 */
+	
 	// run Start() on all game objects
 	for(auto & go : GAMEOBJECTS)
 	{
 		go->Start();
 	}
 
-	while(!gQuit)
+	while(!gQuit) // main loop
 	{
-		SDL_RenderClear(gRenderer);
-
-		// main loop
+		SDL_RenderClear(G_RENDERER);
 
 		// calculate DT
 		LAST = NOW;
 		NOW = SDL_GetPerformanceCounter();
 		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
 
+		// put fps/dt in window title
 		WindowTitle = "FPS: " + std::to_string(1/DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
 		SDL_SetWindowTitle(gWindow, WindowTitle.c_str()); // put fps in window title
 		
@@ -190,25 +176,13 @@ int main(int argc, char* args[]) {
 			}
 
 			go->Tick(); // tick the game object (and its components) 
-
-			// move the game object
-			go->transform.position += Vector2(50,50) * DELTATIME;
-
-			// clamp to screen
-			if(go->transform.position.x > SCREEN_WIDTH){
-				go->transform.position.x = 0;
-			}
-			if(go->transform.position.y > SCREEN_HEIGHT)
-			{
-				go->transform.position.y = 0;
-			}
 		}
 
 		// restore draw color to black so the background remains black
-		SDL_SetRenderDrawColor(gRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_SetRenderDrawColor(G_RENDERER, 0, 0, 0, SDL_ALPHA_OPAQUE);
 
 		// and finally present the frame
-		SDL_RenderPresent(gRenderer);
+		SDL_RenderPresent(G_RENDERER);
 
 		InputCheck();
 
