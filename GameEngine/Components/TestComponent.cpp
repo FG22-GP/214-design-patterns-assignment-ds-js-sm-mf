@@ -2,8 +2,8 @@
 
 
 
-void TestComponent::Tick()
+void TestComponent::Tick(double DeltaTime)
 		{
-			printf("My gameobjects name: %s\n", gameObject->name.c_str());
+			printf("My gameobjects name: %s, deltatime is: %f\n", gameObject->name.c_str(), DeltaTime);
 			//printf("Tick from test component!\n");
 		}

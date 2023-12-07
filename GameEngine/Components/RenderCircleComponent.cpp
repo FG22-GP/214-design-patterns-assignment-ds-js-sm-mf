@@ -1,6 +1,6 @@
 ﻿#include "RenderCircleComponent.h"
 
-void RenderCircleComponent::Tick()
+void RenderCircleComponent::Tick(double DeltaTime)
 {
     SDL_SetRenderDrawColor(renderer, r, g, b, 255);
 

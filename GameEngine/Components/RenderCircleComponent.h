@@ -19,5 +19,5 @@ class RenderCircleComponent : public Component
 			renderer = render;
 		}
 
-		void Tick();
+		void Tick(double DeltaTime);
 };

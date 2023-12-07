@@ -19,6 +19,8 @@
 #define SCREEN_WIDTH 640
 #define SCREEN_HEIGHT 480
 
+double DELTATIME;
+
 // GLOBALS
 SDL_Window* gWindow = NULL;
 SDL_Renderer* gRenderer = NULL;
@@ -119,6 +121,10 @@ int main(int argc, char* args[]) {
 		return 1;
 	}
 
+	// DeltaTime calculation https://gamedev.stackexchange.com/a/110831
+	Uint64 NOW = SDL_GetPerformanceCounter();
+	Uint64 LAST = 0;
+
 
 	// create a bunch of game objects
 	for(int i = 0; i < 100; i++)
@@ -133,6 +139,11 @@ int main(int argc, char* args[]) {
 		RenderCircleComponent* rcc = new RenderCircleComponent(gRenderer, rcolor, 128,128, rsize);
 		rcc->gameObject = go;
 		go->components.push_back(rcc);
+
+		// the test component just spams the gameobject name deltatime
+//		TestComponent* tcc = new TestComponent();
+//		tcc->gameObject = go;
+//		go->components.push_back(tcc);
 		
 		GameObjects.push_back(go);
 	}
@@ -142,17 +153,21 @@ int main(int argc, char* args[]) {
 		SDL_RenderClear(gRenderer);
 
 		// main loop
+
+		// calculate DT
+		LAST = NOW;
+		NOW = SDL_GetPerformanceCounter();
+		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
 		
 		for(auto & go : GameObjects) // Iterate over all GameObjects
 		{
 			// Iterate over all components on the GameObject and run their Tick()
 			for(auto & component : go->components)
 			{
-				component->Tick();
+				component->Tick(DELTATIME);
 			}
 
-			go->transform.position += Vector2(2,1);
-			go->transform.position *= 1.01;
+			go->transform.position += Vector2(20,5) * DELTATIME;
 
 			// clamp to screen
 			if(go->transform.position.x > SCREEN_WIDTH){
