@@ -131,9 +131,9 @@ int main(int argc, char* args[]) {
 		NOW = SDL_GetPerformanceCounter();
 		DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency() );
 
-		// put fps/dt in window title
-		WindowTitle = "FPS: " + std::to_string(1/DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
-		SDL_SetWindowTitle(gWindow, WindowTitle.c_str()); // put fps in window title
+		// put fps/dt in window title //sorry i broke it / max
+		//WindowTitle = "FPS: " + std::to_string(1/DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
+		//SDL_SetWindowTitle(gWindow, WindowTitle.c_str()); // put fps in window title
 		
 		for(auto & go : GAMEOBJECTS) // Iterate over all GameObjects
 		{
