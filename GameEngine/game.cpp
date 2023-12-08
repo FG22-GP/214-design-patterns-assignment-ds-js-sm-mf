@@ -40,6 +40,7 @@ int main(int argc, char* args[])
 
     Paddle* p1 = new Paddle(1);
     p1->transform.position = Vector2(100, 250);
+    p1->transform.scale = Vector3(1.5, 1, 1);
 
     Paddle* p2 = new Paddle(2);
     p2->transform.position = Vector2(500,250);

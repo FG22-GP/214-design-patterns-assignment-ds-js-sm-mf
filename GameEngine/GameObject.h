@@ -1,10 +1,8 @@
 ﻿#pragma once
 #include <string>
 #include <vector>
-
 #include "Global.h"
 #include "Transform.h"
-#include "Vector2.h"
 
 class Component; // forward declaration
 
@@ -19,7 +17,7 @@ public:
     bool visible = true;
 
 
-    GameObject(std::string inName = "GameObject", Transform inTransform = Transform(Vector2(0, 0)))
+    GameObject(std::string inName = "GameObject", Transform inTransform = Transform())
     {
         name = inName;
         transform = inTransform;
