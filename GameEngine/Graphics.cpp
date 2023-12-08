@@ -103,6 +103,11 @@ void Graphics::RenderSquare(int x, int y, int width, int height, unsigned char r
 	SDL_RenderFillRect(renderer, &rect);
 }
 
+SDL_Window* Graphics::GetWindow()
+{
+	return window;
+}
+
 void Graphics::RenderCircle(int x, int y, int radius, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
 {
 	SDL_SetRenderDrawColor(renderer, r, g, b, a);

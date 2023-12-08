@@ -16,6 +16,7 @@ public:
 	static void ClearFrame(void);
 	static void RenderCircle(int x, int y, int radius, unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 0);
 	static void RenderSquare(int x, int y, int width, int height, unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 0);
+	static SDL_Window* GetWindow();
 };
 
 class RenderObject

@@ -14,7 +14,6 @@ class GameObject;
 
 extern double DELTATIME;
 extern std::vector<GameObject*> GAMEOBJECTS;
-extern SDL_Renderer* G_RENDERER;
 
 
 #endif
