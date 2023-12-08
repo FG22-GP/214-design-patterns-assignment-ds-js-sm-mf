@@ -38,6 +38,7 @@
     <ClCompile Include="GameObjects\Ball.cpp" />
     <ClCompile Include="GameObjects\TestGameObject.cpp" />
     <ClCompile Include="Global.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Transform.cpp">
       <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
@@ -126,6 +127,7 @@
     <ClInclude Include="GameObjects\Ball.h" />
     <ClInclude Include="GameObjects\TestGameObject.h" />
     <ClInclude Include="Global.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Vector2.h" />

@@ -14,6 +14,7 @@ class GameObject;
 
 extern double DELTATIME;
 extern std::vector<GameObject*> GAMEOBJECTS;
+extern bool QUIT_REQUESTED;
 
 
 #endif
