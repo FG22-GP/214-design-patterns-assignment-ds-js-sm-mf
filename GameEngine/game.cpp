@@ -12,12 +12,13 @@
 #include "GameObject.h"
 #include "Component.h"
 #include "Transform.h"
-#include "Components/RenderCircleComponent.h"
+#include "Components/CircleRender.h"
 #include "Components/TestComponent.h"
 #include "Random.h"
 #include "Graphics.h"
 #include "Global.h"
 #include "GameObjects/Ball.h"
+#include "GameObjects/Paddle.h"
 #include "GameObjects/TestGameObject.h"
 
 
@@ -107,6 +108,9 @@ int main(int argc, char* args[]) {
 
 		Ball* b = new Ball(Transform(Vector2(rx,ry)), r1, r2, r3, rsize);
 	}
+
+	Paddle* p1 = new Paddle();
+	p1->transform.position = Vector2(100,300);
 
 	// add TestGameObject 
 	//TestGameObject* testGO = new TestGameObject();

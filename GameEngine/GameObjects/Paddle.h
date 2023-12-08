@@ -1,9 +1,16 @@
 ﻿#pragma once
 #include "../GameObject.h"
+#include "../Graphics.h"
 
-class TestGameObject : public GameObject
+class Paddle : public GameObject
 {
 public:
     void Start() override;
     void Tick() override;
+
+
+    Paddle()
+    {
+    }
+    
 };

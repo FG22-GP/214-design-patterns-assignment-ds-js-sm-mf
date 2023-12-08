@@ -1,12 +1,12 @@
 ﻿#include "Ball.h"
 
-#include "../Components/RenderCircleComponent.h"
+#include "../Components/CircleRender.h"
 
 void Ball::Start()
 {
     GameObject::Start();
 
-    RenderCircleComponent* rcc = new RenderCircleComponent(r, g, b, size);
+    CircleRender* rcc = new CircleRender(r, g, b, size);
     AddComponent(rcc);
 
     printf("Hello from ball\n");

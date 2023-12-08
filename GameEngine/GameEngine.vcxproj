@@ -28,10 +28,12 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
-    <ClCompile Include="Components\RenderCircleComponent.cpp" />
+    <ClCompile Include="Components\CircleRender.cpp" />
+    <ClCompile Include="Components\SquareRender.cpp" />
     <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjects\Paddle.cpp" />
     <ClCompile Include="Graphics.cpp" />
     <ClCompile Include="GameObjects\Ball.cpp" />
     <ClCompile Include="GameObjects\TestGameObject.cpp" />
@@ -115,9 +117,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h" />
-    <ClInclude Include="Components\RenderCircleComponent.h" />
+    <ClInclude Include="Components\CircleRender.h" />
+    <ClInclude Include="Components\SquareRender.h" />
     <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjects\Paddle.h" />
     <ClInclude Include="Graphics.h" />
     <ClInclude Include="GameObjects\Ball.h" />
     <ClInclude Include="GameObjects\TestGameObject.h" />

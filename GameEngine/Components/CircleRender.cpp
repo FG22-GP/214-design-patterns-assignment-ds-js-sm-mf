@@ -1,7 +1,7 @@
-﻿#include "RenderCircleComponent.h"
+﻿#include "CircleRender.h"
 #include "../Graphics.h"
 
-void RenderCircleComponent::Tick()
+void CircleRender::Tick()
 {
     Graphics::RenderCircle(gameObject->transform.position.x, gameObject->transform.position.y, radius, r, g, b);
 }
