@@ -15,15 +15,21 @@ void Ball::Start()
 void Ball::Tick()
 {
     GameObject::Tick();
+    Move();
+    
+}
 
-    transform.position += Vector2(50, 50) * DELTATIME;
-
-    if (transform.position.x > SCREEN_WIDTH)
+void Ball::Move()
+{
+    transform.position += Direction * Speed * DELTATIME;
+    
+    if (transform.position.x - size < 0 || transform.position.x + size > SCREEN_WIDTH)
     {
-        transform.position.x = 0;
+        Direction.x = -Direction.x;
     }
-    if (transform.position.y > SCREEN_HEIGHT)
+    if (transform.position.y - size < 0 || transform.position.y + size > SCREEN_HEIGHT)
     {
-        transform.position.y = 0;
+        Direction.y = -Direction.y;
     }
+    printf("\n %f %f", Direction.x, Direction.y);
 }

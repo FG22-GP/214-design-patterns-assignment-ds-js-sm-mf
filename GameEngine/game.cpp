@@ -7,6 +7,7 @@
 #include "Graphics.h"
 #include "Global.h"
 #include "Input.h"
+#include "GameObjects/Ball.h"
 #include "GameObjects/Paddle.h"
 
 int main(int argc, char* args[])
@@ -24,6 +25,9 @@ int main(int argc, char* args[])
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
 
+
+    Ball* ball = new Ball(Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0)));
+   
     // add a bunch of balls
     /*
     for (int i = 0; i < 100; i++)
