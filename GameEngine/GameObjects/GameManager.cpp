@@ -14,6 +14,10 @@ void GameManager::Start()
     player2->Start();
     player2->GetComponent<SquareRender>()->SetColor(255,0,0);
 
+    ball = new Ball();
+    ball->transform = Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0));
+    ball->Start();
+
     SetupGame();
 }
 
@@ -22,6 +26,7 @@ void GameManager::SetupGame()
     // moves paddles to their starting locations
     player1->transform.position = Vector2(100, 250);
     player2->transform.position = Vector2(500,250);
+    ball->transform =Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0)) ;
 }
 
 void GameManager::RestartGame()
