@@ -7,7 +7,7 @@ public:
     void Start() override;
     void Tick() override;
     const float Speed = 100;
-    Vector2 Direction = Vector2(1, 1.5);
+    Vector2 Direction = Vector2(1, 1);
     
     int r, g, b, size;
 

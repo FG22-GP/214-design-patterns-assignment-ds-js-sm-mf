@@ -16,7 +16,6 @@ void Ball::Tick()
 {
     GameObject::Tick();
     Move();
-    
 }
 
 void Ball::Move()
@@ -31,5 +30,4 @@ void Ball::Move()
     {
         Direction.y = -Direction.y;
     }
-    printf("\n %f %f", Direction.x, Direction.y);
 }
