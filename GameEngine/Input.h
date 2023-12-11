@@ -4,7 +4,7 @@
 #include <vector>
 #include <tuple>
 
-enum Button { UNKNOWN, P1_UP, P1_DOWN, P2_UP, P2_DOWN, START };
+enum Button { UNKNOWN, P1_UP, P1_DOWN, P2_UP, P2_DOWN, START, RESTART };
 
 class Input
 {

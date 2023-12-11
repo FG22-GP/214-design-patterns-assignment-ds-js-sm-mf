@@ -11,6 +11,8 @@ public:
     int r, g, b;
     int w, h;
 
+    void SetColor(int inRed, int inGreen, int inBlue);
+
 
     SquareRender(int red = 255, int green = 255, int blue = 255, int width = 10, int height = 100)
     {

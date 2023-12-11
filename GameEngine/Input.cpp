@@ -16,14 +16,18 @@ void Input::Initialize()
     tracked_keys.push_back(SDLK_UP);
     tracked_keys.push_back(SDLK_DOWN);
     tracked_keys.push_back(SDLK_ESCAPE);
+    tracked_keys.push_back(SDLK_r);
 
     // map sdl keys to buttons
     // ideally this should read mappings from a file (like json) or something
     mappings.push_back(std::make_tuple(START, SDLK_ESCAPE));
+    mappings.push_back(std::make_tuple(RESTART, SDLK_r));
     mappings.push_back(std::make_tuple(P1_UP, SDLK_w));
     mappings.push_back(std::make_tuple(P1_DOWN, SDLK_s));
     mappings.push_back(std::make_tuple(P2_UP, SDLK_UP));
     mappings.push_back(std::make_tuple(P2_DOWN, SDLK_DOWN));
+    // could probably iterate over the mappings to automatically populate tracked_keys
+
 
 }
 

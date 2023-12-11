@@ -4,6 +4,8 @@
 #include "Global.h"
 #include "Transform.h"
 
+// GameObject is basically our MonoBehaviour
+
 class Component; // forward declaration
 
 class GameObject
@@ -16,22 +18,19 @@ public:
     bool visible = true;
     std::vector<Component*> components;
 
+    virtual void Start();
+    virtual void Tick();
+    void AddComponent(Component* NewComponent);
+    void Destroy();
+
+    template <class T> T* GetComponent();
+    
     GameObject(std::string inName = "GameObject", Transform inTransform = Transform())
     {
         name = inName;
         transform = inTransform;
         GAMEOBJECTS.push_back(this);
-    };
-
-    virtual void Start();
-    virtual void Tick();
-    void AddComponent(Component* NewComponent);
-    void Destroy();
-    
-    template <class T> T* GetComponent();
-
-private:
-    int id;
+    }
     
 };
 
