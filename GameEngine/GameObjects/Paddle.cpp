@@ -8,6 +8,9 @@ void Paddle::Start()
 
     SquareRender* sr = new SquareRender(0, 255);
     AddComponent(sr);
+
+    transform.scale.x = 25;
+    transform.scale.y = 100;
 }
 
 void Paddle::Tick()
@@ -38,5 +41,15 @@ void Paddle::Tick()
         {
             transform.position += Vector2(0, 1) * Speed * DELTATIME;
         }
+    }
+
+    // clamp library would be nice
+    if (transform.position.y < 0)
+    {
+        transform.position.y = 0;
+    }
+    if (transform.position.y > SCREEN_HEIGHT - transform.scale.y)
+    {
+        transform.position.y = SCREEN_HEIGHT - transform.scale.y;
     }
 }
