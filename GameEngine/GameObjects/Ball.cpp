@@ -1,5 +1,6 @@
 ﻿#include "Ball.h"
 
+#include "../../ext/SDL2-2.26.4/lib/x64/CollisionComponent.h"
 #include "../Components/CircleRender.h"
 
 void Ball::Start()
@@ -8,6 +9,8 @@ void Ball::Start()
 
     CircleRender* rcc = new CircleRender(r, g, b, size);
     AddComponent(rcc);
+    collision = new CollisionComponent(this->transform.position.x , this->transform.position.y, transform.scale.x, transform.scale.y);
+    AddComponent(collision);
 
     printf("Hello from ball\n");
 }

@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "../GameObject.h"
+#include "../../ext/SDL2-2.26.4/lib/x64/CollisionComponent.h"
 
 class Ball : public GameObject
 {
@@ -8,6 +9,8 @@ public:
     void Tick() override;
     const float Speed = 100;
     Vector2 Direction = Vector2(1, 1);
+
+    CollisionComponent* collision;
     
     int r, g, b, size;
 

@@ -7,6 +7,7 @@
 #include "Graphics.h"
 #include "Global.h"
 #include "Input.h"
+#include "GameObjects/Ball.h"
 
 int main(int argc, char* args[])
 {
@@ -24,6 +25,9 @@ int main(int argc, char* args[])
     Uint64 LAST = 0;
 
 
+    Ball* ball = new Ball(Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0)));
+    ball->Start();
+    
     // only object we need to add here (GameManager will spawn the paddles etc)
     GameManager* GM = new GameManager();
     GM->Start(); // would be nice if this would be called automatically from the constructor but cant since its virtual
