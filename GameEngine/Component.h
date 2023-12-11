@@ -3,8 +3,9 @@
 
 class Component
 {
-	public:
-	virtual ~Component() = default;
-	GameObject *gameObject;
-		virtual void Tick() = 0;
+public:
+    virtual ~Component() = default;
+    GameObject* gameObject;
+    virtual void Tick();
+    virtual void Start();
 };
