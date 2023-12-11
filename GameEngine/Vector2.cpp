@@ -11,6 +11,7 @@ Vector2 Vector2::operator+(const Vector2& other)
 
 Vector2 Vector2::operator+=(const Vector2& other)
 {
+    
     x += other.x;
     y += other.y;
     return *this;
@@ -18,9 +19,7 @@ Vector2 Vector2::operator+=(const Vector2& other)
 
 Vector2 Vector2::operator*(const float factor)
 {
-    x *= factor;
-    y *= factor;
-    return *this;
+    return Vector2(x * factor, y * factor);
 }
 
 Vector2 Vector2::operator*=(const float factor)
