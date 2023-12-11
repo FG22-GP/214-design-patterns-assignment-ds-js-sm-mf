@@ -14,7 +14,6 @@ void Paddle::Tick()
 {
     GameObject::Tick();
 
-
     // theres probably a prettier way to do this
     if (Player == 1)
     {

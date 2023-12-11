@@ -2,13 +2,11 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
+#include "GameObjects/GameManager.h"
 #include "GameObject.h"
-#include "Transform.h"
 #include "Graphics.h"
 #include "Global.h"
 #include "Input.h"
-#include "GameObjects/Ball.h"
-#include "GameObjects/Paddle.h"
 
 int main(int argc, char* args[])
 {
@@ -26,39 +24,10 @@ int main(int argc, char* args[])
     Uint64 LAST = 0;
 
 
-    Ball* ball = new Ball(Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0)));
-   
-    // add a bunch of balls
-    /*
-    for (int i = 0; i < 100; i++)
-    {
-        int r1 = Random::RandomIntInRange(0, 255);
-        int r2 = Random::RandomIntInRange(0, 255);
-        int r3 = Random::RandomIntInRange(0, 255);
-        int rsize = Random::RandomIntInRange(5, 20);
-        int rx = Random::RandomIntInRange(0, SCREEN_WIDTH);
-        int ry = Random::RandomIntInRange(0, SCREEN_HEIGHT);
+    // only object we need to add here (GameManager will spawn the paddles etc)
+    GameManager* GM = new GameManager();
+    GM->Start(); // would be nice if this would be called automatically from the constructor but cant since its virtual
 
-        Ball* b = new Ball(Transform(Vector2(rx, ry)), r1, r2, r3, rsize);
-    }*/
-
-    Paddle* p1 = new Paddle(1);
-    p1->transform.position = Vector2(100, 250);
-    p1->transform.scale = Vector3(1.5, 1, 1);
-
-    Paddle* p2 = new Paddle(2);
-    p2->transform.position = Vector2(500,250);
-
-    /*
-     * at this point the "scene" should have all the gameobjects in it,
-     * as we're about to run Start() and then proceed to the main loop
-     */
-
-    // run Start() on all game objects
-    for (auto& go : GAMEOBJECTS)
-    {
-        go->Start();
-    }
 
     while (!QUIT_REQUESTED) // main loop
     {
@@ -72,7 +41,7 @@ int main(int argc, char* args[])
 
         // put fps/dt in window title 
         WindowTitle = "Pong - FPS: " + std::to_string(1 / DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
-        SDL_SetWindowTitle(Graphics::GetWindow(), WindowTitle.c_str()); // put fps in window title
+        SDL_SetWindowTitle(Graphics::GetWindow(), WindowTitle.c_str());
 
         for (auto& go : GAMEOBJECTS) // Iterate over all GameObjects
         {
@@ -80,15 +49,11 @@ int main(int argc, char* args[])
             {
                 continue; // this gameobject is inactive, dont do anything
             }
-
             go->Tick(); // tick the game object (and its components) 
         }
 
+        
         Graphics::PresentFrame();
-        if(Input::IsButtonDown(START))
-        {
-            QUIT_REQUESTED=true;
-        }
     }
 
     Graphics::Exit();
