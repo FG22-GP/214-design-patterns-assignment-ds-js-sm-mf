@@ -1,6 +1,8 @@
 ﻿#include "Paddle.h"
 
 #include "../Components/SquareRender.h"
+#include "../Components/Collision.h"
+#include "../Components/Colliders/BoxCollider.h"
 
 void Paddle::Start()
 {
@@ -11,6 +13,9 @@ void Paddle::Start()
 
     transform.scale.x = 25;
     transform.scale.y = 100;
+
+    auto bc = new BoxCollider();
+    AddComponent(bc);
 }
 
 void Paddle::Tick()

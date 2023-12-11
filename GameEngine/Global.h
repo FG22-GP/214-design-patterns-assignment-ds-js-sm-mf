@@ -1,7 +1,9 @@
 ﻿#pragma once
 #include <SDL_render.h>
 #include <vector>
+
 class GameObject;
+class Collision;
 
 
 #define SCREEN_WIDTH 640
@@ -14,6 +16,7 @@ class GameObject;
 
 extern double DELTATIME;
 extern std::vector<GameObject*> GAMEOBJECTS;
+extern std::vector<Collision*> COLLIDERS;
 extern bool QUIT_REQUESTED;
 
 

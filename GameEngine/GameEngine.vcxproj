@@ -29,6 +29,9 @@
   <ItemGroup>
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Components\CircleRender.cpp" />
+    <ClCompile Include="Components\Colliders\BoxCollider.cpp" />
+    <ClCompile Include="Components\Colliders\CircleCollider.cpp" />
+    <ClCompile Include="Components\Collision.cpp" />
     <ClCompile Include="Components\SquareRender.cpp" />
     <ClCompile Include="Components\TestComponent.cpp" />
     <ClCompile Include="game.cpp" />
@@ -194,6 +197,9 @@
   <ItemGroup>
     <ClInclude Include="Component.h" />
     <ClInclude Include="Components\CircleRender.h" />
+    <ClInclude Include="Components\Colliders\BoxCollider.h" />
+    <ClInclude Include="Components\Colliders\CircleCollider.h" />
+    <ClInclude Include="Components\Collision.h" />
     <ClInclude Include="Components\SquareRender.h" />
     <ClInclude Include="Components\TestComponent.h" />
     <ClInclude Include="GameObject.h" />

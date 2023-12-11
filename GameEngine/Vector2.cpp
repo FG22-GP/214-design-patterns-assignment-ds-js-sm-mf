@@ -42,3 +42,4 @@ Vector2 Vector2::operator-=(const Vector2& other)
     y -= other.y;
     return *this;
 }
+

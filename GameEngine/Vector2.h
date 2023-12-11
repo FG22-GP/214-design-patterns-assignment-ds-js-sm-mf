@@ -15,4 +15,5 @@ class Vector2
 		Vector2 operator*=(float factor);
 		Vector2 operator-(const Vector2& other);
 		Vector2 operator-=(const Vector2& other);
+
 };

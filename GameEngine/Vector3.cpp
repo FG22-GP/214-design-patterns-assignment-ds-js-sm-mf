@@ -64,3 +64,12 @@ Vector3 Vector3::operator+=(const Vector2& other)
     // z = z;
     return *this;
 }
+
+float Vector3::Distance(const Vector3 v1, const Vector3 v2)
+{
+    float dx = v2.x - v1.x;
+    float dy = v2.y - v1.y;
+    float dz = v2.z - v1.z;
+
+    return std::sqrt(dx * dx + dy * dy + dz * dz);
+}
