@@ -1,5 +1,7 @@
 ﻿#include "CircleCollider.h"
 
+#include "BoxCollider.h"
+
 void CircleCollider::Start()
 {
     Collision::Start();
@@ -17,14 +19,22 @@ void CircleCollider::Tick()
             continue;
         }
 
-        auto ourPosition = this->gameObject->transform.position;
-        auto theirPoisition = c->gameObject->transform.position;
-        auto Distance = Vector3::Distance(ourPosition, theirPoisition);
+        auto Collider = this->gameObject ->GetComponent<BoxCollider>();
+        auto otherCollider = c->gameObject->GetComponent<BoxCollider>();
+        //auto Distance = Vector3::Distance(circlePosition, paddlePosition);
         // printf("%s distance to %s: %f\n", gameObject->name.c_str(), c->gameObject->name.c_str(), Distance);
-
-        if (Distance < radius)
+        printf("\n null" );
+        if (!Collider)
         {
-            HandleCollision();
+            
+        }
+        SDL_Rect* result = nullptr;
+        if (SDL_IntersectRect(Collider->GetCollider(), otherCollider->GetCollider(), result))
+        {
+            if (result)
+            {
+                HandleCollision();
+            }
         }
     }
 }

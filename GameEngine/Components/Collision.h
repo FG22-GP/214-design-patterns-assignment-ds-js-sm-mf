@@ -4,9 +4,11 @@
 
 class Collision : public Component
 {
+
 public:
     void Start() override;
     void Tick() override;
+    bool NeedToHandleCollision = false;
     virtual void HandleCollision();
 
     Collision()

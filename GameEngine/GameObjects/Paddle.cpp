@@ -14,7 +14,7 @@ void Paddle::Start()
     transform.scale.x = 25;
     transform.scale.y = 100;
 
-    auto bc = new BoxCollider();
+    bc = new BoxCollider(transform.position.x, transform.position.y, transform.scale.x, transform.scale.y);
     AddComponent(bc);
 }
 

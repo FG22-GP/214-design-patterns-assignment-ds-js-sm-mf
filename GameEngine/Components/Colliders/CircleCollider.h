@@ -9,7 +9,6 @@ public:
     void HandleCollision() override;
 
     float radius = 0;
-    bool NeedToHandleCollision = false;
 
     CircleCollider(float inRadius)
     {

@@ -1,41 +1,57 @@
 ﻿#include "Ball.h"
 
+#include <algorithm>
+#include <SDL_system.h>
+
 #include "../Components/CircleRender.h"
 #include "../Components/Collision.h"
-#include "../Components/Colliders/CircleCollider.h"
+
+Vector2 Ball::GetRandomDirection()
+{
+    const float randomY = MathHelpers::RandomFloat(-0.3f, 0.3f);
+    const float randomX = MathHelpers::RandomFloat(-1, 1) + 0.3f;
+
+    return Vector2(randomX, randomY).Normalize();
+}
 
 void Ball::Start()
 {
     GameObject::Start();
+    CurrentSpeed = Speed;
 
-    CircleRender* rcc = new CircleRender(r, g, b, size);
+    rcc = new CircleRender(r, g, b, size);
     AddComponent(rcc);
-
-    cc = new CircleCollider(size/2);
-    AddComponent(cc);
+    bc = new BoxCollider(transform.position.x, transform.position.y, size / 2, size / 2);
+    AddComponent(bc);
+    Reset();
 
     name = "Ball";
-
-    printf("Hello from ball\n");
 }
 
+// auto randomOffset = Direction.x > 0? Vector2(MathHelpers::RandomFloat( 0, 1),MathHelpers::RandomFloat( 0, 1) ):  Vector2(MathHelpers::RandomFloat( -1, 0), MathHelpers::RandomFloat(-1, 0));
 void Ball::Tick()
 {
     GameObject::Tick();
-
-    if(cc->NeedToHandleCollision)
+    if (bc->NeedToHandleCollision)
     {
-        cc->NeedToHandleCollision = false;
-        Direction = Direction * -1;
+        bc->NeedToHandleCollision = false;
+        Direction.x = -Direction.x;
+        CurrentSpeed += 20;
     }
 
     Move();
 }
 
+void Ball::Reset()
+{
+    CurrentSpeed = Speed;
+    Direction = GetRandomDirection();
+}
+
 void Ball::Move()
 {
-    transform.position += Direction * Speed * DELTATIME;
-    
+    transform.position += Direction * CurrentSpeed * DELTATIME;
+
     if (transform.position.x - size < 0 || transform.position.x + size > SCREEN_WIDTH)
     {
         Direction.x = -Direction.x;
