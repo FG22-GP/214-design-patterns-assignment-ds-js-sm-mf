@@ -19,7 +19,6 @@ int main(int argc, char* args[])
     Input::Initialize();
 
     // initialize DeltaTime calculation https://gamedev.stackexchange.com/a/110831
-    std::string WindowTitle = "Pong - FPS: xxx";
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
 
@@ -38,10 +37,6 @@ int main(int argc, char* args[])
         LAST = NOW;
         NOW = SDL_GetPerformanceCounter();
         DELTATIME = ((NOW - LAST) / (double)SDL_GetPerformanceFrequency());
-
-        // put fps/dt in window title 
-        WindowTitle = "Pong - FPS: " + std::to_string(1 / DELTATIME) + " (deltatime: " + std::to_string(DELTATIME) + ")";
-        SDL_SetWindowTitle(Graphics::GetWindow(), WindowTitle.c_str());
 
         for (auto& go : GAMEOBJECTS) // Iterate over all GameObjects
         {

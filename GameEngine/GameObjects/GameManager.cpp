@@ -1,6 +1,7 @@
 ﻿#include "GameManager.h"
 
 #include "../Components/SquareRender.h"
+#include "../Components/TextRender.h"
 
 void GameManager::Start()
 {
@@ -17,14 +18,20 @@ void GameManager::Start()
     ball = new Ball();
     ball->Start();
 
+    TextGameObject = new GameObject();
+    TextGameObject->transform.position = Vector2(SCREEN_WIDTH/2 - 30,25);
+    TextRenderComponent = new TextRender();
+    TextGameObject->AddComponent(TextRenderComponent);
+    UpdateScoreText();
+
     RestartGame();
 }
 
 void GameManager::ResetPositions()
 {
     // moves paddles to their starting locations
-    player1->transform.position = Vector2(30, SCREEN_HEIGHT / 2);
-    player2->transform.position = Vector2(590,SCREEN_HEIGHT / 2);
+    player1->transform.position = Vector2(50, SCREEN_HEIGHT / 2);
+    player2->transform.position = Vector2(570,SCREEN_HEIGHT / 2);
 
     // move ball to starting location // middle of screen
     ball->transform = Transform(Vector3(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, 0), Vector3(0, 0, 0), Vector3(255, 0, 0));
@@ -46,11 +53,13 @@ void GameManager::Reset()
     ResetPositions();
 }
 
-void GameManager::RestartGame()
+void GameManager::RestartGame() // pressed R
 {
     ScorePlayer1 = 0;
     ScorePlayer2 = 0;
-    
+    UpdateScoreText();
+
+    ball->Reset();
     ResetPositions();
 }
 
@@ -59,14 +68,14 @@ void GameManager::Tick()
     GameObject::Tick();
 
     // check ball position
-    if (ball->transform.position.x < 20)
+    if (ball->transform.position.x < 10)
     {
         // player 1 lose
         AddScore(2, 1); // add 1 point to player 2
         Player1Lost = true;
         Reset();
     }
-    else if (ball->transform.position.x > 620)
+    else if (ball->transform.position.x > SCREEN_WIDTH-10)
     {
         // player 2 lose
         Player1Lost = false;
@@ -98,9 +107,16 @@ void GameManager::AddScore(int Player, int ScoreToAdd)
     }
 
     printf("score is now %i - %i\n", ScorePlayer1, ScorePlayer2);
+    UpdateScoreText();
 }
 
 std::vector<int> GameManager::GetScores()
 {
     return std::vector<int>{ScorePlayer1, ScorePlayer2};
+}
+
+void GameManager::UpdateScoreText()
+{
+    
+    TextRenderComponent->SetText(std::to_string(ScorePlayer1) + " - " + std::to_string(ScorePlayer2));
 }
