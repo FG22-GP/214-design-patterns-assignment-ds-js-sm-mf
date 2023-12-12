@@ -48,13 +48,6 @@ void Paddle::Tick()
         }
     }
 
-    // clamp library would be nice
-    if (transform.position.y < 0)
-    {
-        transform.position.y = 0;
-    }
-    if (transform.position.y > SCREEN_HEIGHT - transform.scale.y)
-    {
-        transform.position.y = SCREEN_HEIGHT - transform.scale.y;
-    }
+    // clamp to screen
+    transform.position.y = MathHelpers::Clamp(transform.position.y, 0.0f, SCREEN_HEIGHT - transform.scale.y);
 }

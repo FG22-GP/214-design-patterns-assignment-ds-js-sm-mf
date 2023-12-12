@@ -24,4 +24,11 @@ public:
         return angle * (PI / 180.0f);
     }
 
+    template<typename T>
+    static T Clamp(T value, T min, T max)
+    {
+        return std::max(min, std::min(value,max));
+    }
+
+
 };
