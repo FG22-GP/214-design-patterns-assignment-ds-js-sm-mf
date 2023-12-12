@@ -24,14 +24,4 @@ public:
         return angle * (PI / 180.0f);
     }
 
-    static float RandomFloat(float min, float max) {
- 
-        std::srand(static_cast<unsigned int>(std::time(nullptr)));
-        std::random_device rd;
-        std::mt19937 gen(rd());
-        std::uniform_real_distribution<float> dis(min, max);
-        
-        return dis(gen);
-    }
-    
 };

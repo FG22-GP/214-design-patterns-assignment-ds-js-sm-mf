@@ -8,8 +8,8 @@
 
 Vector2 Ball::GetRandomDirection()
 {
-    const float randomY = MathHelpers::RandomFloat(-0.3f, 0.3f);
-    const float randomX = MathHelpers::RandomFloat(-1, 1) + 0.3f;
+    const float randomY = Random::RandomFloat(-0.3f, 0.3f);
+    const float randomX = Random::RandomFloat(-1, 1) + 0.3f;
 
     return Vector2(randomX, randomY).Normalize();
 }
