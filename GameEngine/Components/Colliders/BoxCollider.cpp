@@ -5,8 +5,6 @@
 void BoxCollider::Start()
 {
     Collision::Start();
-    CollisionBox.w = gameObject->transform.scale.x;
-    CollisionBox.h = gameObject->transform.scale.y;
 }
 
 void BoxCollider::Tick()
