@@ -19,7 +19,7 @@ public:
 
     BoxCollider* bc;
 
-    Ball(Transform inTransform = Vector3(0, 0, 0), int red = 255, int green = 0, int blue = 0, int inSize = 10)
+    Ball(Transform inTransform = Vector3(0, 0, 0), int red = 255, int green = 255, int blue = 255, int inSize = 10)
     {
         r = red;
         g = green;
