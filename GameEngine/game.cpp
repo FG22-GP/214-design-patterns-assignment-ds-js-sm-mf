@@ -22,11 +22,7 @@ int main(int argc, char* args[])
     Uint64 NOW = SDL_GetPerformanceCounter();
     Uint64 LAST = 0;
 
-
-    // only object we need to add here (GameManager will spawn the paddles etc)
-    GameManager* GM = new GameManager();
-    GM->Start(); // would be nice if this would be called automatically from the constructor but cant since its virtual
-
+    GameManager::GetInstance().Start();
 
     while (!QUIT_REQUESTED) // main loop
     {
