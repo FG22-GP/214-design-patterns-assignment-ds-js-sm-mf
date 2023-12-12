@@ -34,6 +34,7 @@
     <ClCompile Include="Components\Collision.cpp" />
     <ClCompile Include="Components\SquareRender.cpp" />
     <ClCompile Include="Components\TestComponent.cpp" />
+    <ClCompile Include="Components\TextRender.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjects\GameManager.cpp">
@@ -203,6 +204,7 @@
     <ClInclude Include="Components\Collision.h" />
     <ClInclude Include="Components\SquareRender.h" />
     <ClInclude Include="Components\TestComponent.h" />
+    <ClInclude Include="Components\TextRender.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjects\GameManager.h" />
     <ClInclude Include="GameObjects\Paddle.h" />

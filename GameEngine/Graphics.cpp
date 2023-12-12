@@ -1,7 +1,5 @@
 #include "Graphics.h"
-#include <set>
 
-std::set<RenderObject*> RenderObjects;
 SDL_Renderer* renderer = NULL;
 TTF_Font* font = NULL;
 SDL_Window* window = NULL;
@@ -19,10 +17,6 @@ void Graphics::ClearFrame()
 
 void Graphics::PresentFrame()
 {
-	for (RenderObject* s : RenderObjects)
-	{
-		s->Render();
-	}
 	SDL_RenderPresent(renderer);
 }
 
@@ -47,12 +41,12 @@ bool Graphics::Initialize(const char* windowTitle, int Width, int Height)
 		ok = false;
 	}
 
-	/*font = TTF_OpenFont("font.ttf", 28);
+	font = TTF_OpenFont("font/lazy.ttf", 28);
 	if (font == NULL)
 	{
 		printf("Failed to load lazy font! SDL_ttf Error: %s\n", TTF_GetError());
 		ok = false;
-	}*/
+	}
 
 	if (ok)
 	{
@@ -83,17 +77,6 @@ void Graphics::Exit()
 		SDL_Quit();
 		initDone = false;
 	}
-}
-
-RenderObject::RenderObject()
-{
-	RenderObjects.insert(this);
-	Hide = false;
-}
-
-RenderObject::~RenderObject()
-{
-	RenderObjects.erase(this);
 }
 
 void Graphics::RenderSquare(int x, int y, int width, int height, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
@@ -154,4 +137,45 @@ void Graphics::RenderCircle(int x, int y, int radius, unsigned char r, unsigned 
 		}
 	}
 
+}
+
+void Text::SetText(std::string text, unsigned char r, unsigned char g, unsigned char b, unsigned char a)
+{
+	if (fontTexture != NULL)
+	{
+		SDL_DestroyTexture(fontTexture);
+		fontTexture = NULL;
+		width = 0;
+		height = 0;
+	}
+
+	SDL_Color col = { r, g, b, a };
+
+	SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), col);
+	if (textSurface == NULL)
+	{
+		printf("Unable to render text surface! SDL_ttf Error: %s\n", TTF_GetError());
+	}
+	else
+	{
+		fontTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+		if (fontTexture == NULL)
+		{
+			printf("Unable to create texture from rendered text! SDL Error: %s\n", SDL_GetError());
+		}
+		else
+		{
+			width = textSurface->w;
+			height = textSurface->h;
+		}
+		SDL_FreeSurface(textSurface);
+	}
+
+}
+
+void Text::Render(Transform* t)
+{
+	if (renderer == NULL || fontTexture == NULL) return;
+	SDL_Rect rq = { xpos + t->position.x, ypos + t->position.y, width * t->scale.x, height * t->scale.y };
+	SDL_RenderCopy(renderer, fontTexture, NULL, &rq);
 }
