@@ -31,6 +31,7 @@
     <ClCompile Include="Components\CircleRender.cpp" />
     <ClCompile Include="Components\SquareRender.cpp" />
     <ClCompile Include="Components\TestComponent.cpp" />
+    <ClCompile Include="Components\TextRender.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameObjects\Paddle.cpp" />
@@ -122,6 +123,7 @@
     <ClInclude Include="Components\CircleRender.h" />
     <ClInclude Include="Components\SquareRender.h" />
     <ClInclude Include="Components\TestComponent.h" />
+    <ClInclude Include="Components\TextRender.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameObjects\Paddle.h" />
     <ClInclude Include="Graphics.h" />
