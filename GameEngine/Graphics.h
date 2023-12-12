@@ -2,8 +2,10 @@
 
 #include <vector>
 #include <set>
+#include <string>
 #include <SDL.h>
 #include <SDL_ttf.h>
+#include "Transform.h"
 
 class RenderObject;
 
@@ -22,18 +24,24 @@ public:
 class RenderObject
 {
 public:
-	RenderObject();
-	~RenderObject();
 
-	virtual void Render() = 0;
+	virtual void Render(Transform* t) = 0;
+
+	void SetPos(int x, int y)
+	{
+		xpos = x;
+		ypos = y;
+	}
 
 	bool Hide;
+	int xpos = 0;
+	int ypos = 0;
 };
 
 class Sprite : public RenderObject
 {
 public:
-	void Render();
+	void Render(Transform* t);
 
 	void Set(int x, int y, double angle = 0.0, int textureIndex = -1, SDL_Point center = { 32, 32 }, SDL_RendererFlip flip = SDL_FLIP_NONE);
 	void Set(int textureIndex);
@@ -53,9 +61,8 @@ private:
 class Rectangle : public RenderObject
 {
 public:
-	void Render();
+	void Render(Transform* t);
 
-	void SetPos(int x, int y, int width, int height);
 	void SetSize(int Width, int Height);
 	void SetColor(unsigned char r, unsigned char g, unsigned char b);
 
@@ -68,9 +75,8 @@ private:
 class Circle : public RenderObject
 {
 public:
-	void Render();
+	void Render(Transform* t);
 
-	void SetPos(int x, int y, int width, int height);
 	void SetSize(int Width, int Height);
 	void SetColor(unsigned char r, unsigned char g, unsigned char b);
 
@@ -83,17 +89,13 @@ private:
 class Text : public RenderObject
 {
 public:
-	Text();
-	~Text();
 
-	void Render();
+	void Render(Transform* t);
 
-	void Set(int x, int y);
-	void Set(const char* text);
+	void SetText(std::string text, unsigned char r = 255, unsigned char g = 255, unsigned char b = 255, unsigned char a = 0);
 
 private:
-	SDL_Texture* fontTexture;
-	SDL_Rect renderQuad;
+	SDL_Texture* fontTexture = NULL;
 	int width;
 	int height;
 };
