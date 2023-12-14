@@ -10,9 +10,8 @@ public:
     void Start() override;
     void Tick() override;
     void Reset();
-    Vector2 GetRandomDirection();
     float Speed = 150;
-    Vector2 Direction; //= Vector2(-1, 0);
+    Vector2 Direction;
     CircleRender* rcc;
 
     int r, g, b, size;
@@ -31,4 +30,5 @@ public:
 private:
     void Move();
     float CurrentSpeed;
+    Vector2 GetRandomDirection();
 };

@@ -6,13 +6,6 @@
 #include "../Components/CircleRender.h"
 #include "../Components/Collision.h"
 
-Vector2 Ball::GetRandomDirection()
-{
-    const float randomY = Random::RandomFloat(-0.3f, 0.3f);
-    const float randomX = Random::RandomFloat(-1, 1) + 0.3f;
-
-    return Vector2(randomX, randomY).Normalize();
-}
 
 void Ball::Start()
 {
@@ -28,7 +21,6 @@ void Ball::Start()
     name = "Ball";
 }
 
-// auto randomOffset = Direction.x > 0? Vector2(MathHelpers::RandomFloat( 0, 1),MathHelpers::RandomFloat( 0, 1) ):  Vector2(MathHelpers::RandomFloat( -1, 0), MathHelpers::RandomFloat(-1, 0));
 void Ball::Tick()
 {
     GameObject::Tick();
@@ -60,4 +52,19 @@ void Ball::Move()
     {
         Direction.y = -Direction.y;
     }
+}
+
+Vector2 Ball::GetRandomDirection()
+{
+    float randomY = Random::RandomFloat(-0.8f, 0.8f);
+    float randomX = Random::RandomFloat(-1, 1);
+    auto newDir = Vector2(randomX, randomY).Normalize();
+    
+    if(newDir.y > 0.8f || newDir.y < -0.8f) return GetRandomDirection();
+
+    
+    return newDir;
+    
+
+    
 }
