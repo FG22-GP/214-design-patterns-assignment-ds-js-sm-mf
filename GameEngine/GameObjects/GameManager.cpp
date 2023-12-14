@@ -39,17 +39,7 @@ void GameManager::ResetPositions()
 
 void GameManager::Reset()
 {
-    // make ball go towards losing player (loser serves)
-    if (Player1Lost)
-    {
-        ball->Direction = Vector2(-1, 0);
-    }
-    else
-    {
-        ball->Direction = Vector2(1, 0);
-    }
     ball->Reset();
-
     ResetPositions();
 }
 

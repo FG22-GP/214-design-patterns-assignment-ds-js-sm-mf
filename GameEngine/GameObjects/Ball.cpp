@@ -59,12 +59,8 @@ Vector2 Ball::GetRandomDirection()
     float randomY = Random::RandomFloat(-0.8f, 0.8f);
     float randomX = Random::RandomFloat(-1, 1);
     auto newDir = Vector2(randomX, randomY).Normalize();
-    
-    if(newDir.y > 0.8f || newDir.y < -0.8f) return GetRandomDirection();
 
-    
+    if (newDir.y > 0.8f || newDir.y < -0.8f) return GetRandomDirection();
+
     return newDir;
-    
-
-    
 }
