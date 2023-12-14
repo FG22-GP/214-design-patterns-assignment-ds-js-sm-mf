@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include <string>
 #include <vector>
+
 #include "Global.h"
 #include "Transform.h"
 
@@ -24,6 +25,8 @@ public:
     void Destroy();
 
     template <class T> T* GetComponent();
+
+    template <class T> bool RemoveComponent();
     
     GameObject(std::string inName = "GameObject", Transform inTransform = Transform())
     {
@@ -45,4 +48,18 @@ T* GameObject::GetComponent()
         }
     }
     return nullptr;
+}
+
+template <class T>
+bool GameObject::RemoveComponent() // returns true if component removal was succesful
+{
+    for(int i = 0; i < components.size(); i++)
+    {
+        if (components[i] == dynamic_cast<T*>(components[i]))
+        {
+            components.erase(components.begin() + i);
+            return true;
+        }
+    }
+    return false;
 }

@@ -21,6 +21,7 @@ void GameObject::AddComponent(Component* NewComponent)
     components.push_back(NewComponent);
 }
 
+
 void GameObject::Destroy()
 {
     // find ourselves in the GAMEOBJECTS array and remove us from there
