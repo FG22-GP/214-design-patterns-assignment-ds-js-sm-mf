@@ -62,13 +62,11 @@ void GameManager::Tick()
     {
         // player 1 lose
         AddScore(2, 1); // add 1 point to player 2
-        Player1Lost = true;
         Reset();
     }
     else if (ball->transform.position.x > SCREEN_WIDTH-10)
     {
         // player 2 lose
-        Player1Lost = false;
         AddScore(1, 1); // add 1 point to player 1
         Reset();
     }

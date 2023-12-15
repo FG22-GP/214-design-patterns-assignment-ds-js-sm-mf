@@ -9,36 +9,36 @@
 class GameManager : public GameObject
 {
 public:
-   static GameManager& GetInstance()
-   {
-      static GameManager Instance;
-      return Instance;
-   }
+    static GameManager& GetInstance()
+    {
+        static GameManager Instance;
+        return Instance;
+    }
 
-   void Start() override;
-   void ResetPositions();
-   void Reset();
-   void RestartGame();
-   void Tick() override;
-   void AddScore(int Player, int ScoreToAdd);
-   std::vector<int> GetScores();
-   void UpdateScoreText();
+    void Start() override;
+    void ResetPositions();
+    void Reset();
+    void RestartGame();
+    void Tick() override;
+    void AddScore(int Player, int ScoreToAdd);
+    std::vector<int> GetScores();
+    void UpdateScoreText();
 
-   Ball* ball;
-   Paddle* player1;
-   Paddle* player2;
+    Ball* ball;
+    Paddle* player1;
+    Paddle* player2;
 
-   GameObject* TextGameObject;
-   TextRender* TextRenderComponent;
+    GameObject* TextGameObject;
+    TextRender* TextRenderComponent;
 
-   int ScorePlayer1 = 0;
-   int ScorePlayer2 = 0;
-
-   bool Player1Lost = false;
+    int ScorePlayer1 = 0;
+    int ScorePlayer2 = 0;
 
 private:
-   GameManager() {}
-   GameManager(GameManager const&) = delete;
-   void operator=(GameManager const&) = delete;
-    
+    GameManager()
+    {
+    }
+
+    GameManager(GameManager const&) = delete;
+    void operator=(GameManager const&) = delete;
 };
