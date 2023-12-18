@@ -16,10 +16,10 @@ Made by:
 
 # Controls
 
-W/S - Player 1 move up/down
-Up/Down - Player 2 move up/down
-R - Restart
-ESC - Quit
+* W/S - Player 1 move up/down
+* Up/Down - Player 2 move up/down
+* R - Restart
+* ESC - Quit
 
 # Approach
 
