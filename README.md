@@ -9,11 +9,10 @@ Made by:
 - **Sergei Maltcev** - physics, gameplay
 - **Max Fagerström** - graphics library
 
+![Screenshot](https://djsimg.org/Piyz7KpNNci3IMdnjoMt.png)
+![Screenshot](https://djsimg.org/8rV5nD2Q3QK3WO5d2wVj.png)
 
-![Screenshot 1](https://djsimg.org/EZi4F89YQ07KkKoIZGnQ.png)
-![Screenshot 2](https://djsimg.org/EaKT4X1Vgt8HwRllZrAb.png)
-
-[![Video](http://img.youtube.com/vi/5w5r4cPl-b0/0.jpg)](http://www.youtube.com/watch?v=5w5r4cPl-b0 "sdl pong")
+[Video](https://www.youtube.com/watch?v=5w5r4cPl-b0)
 
 # Controls
 
